@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investissements</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+    }
+
+    .header {
+        background: black;
+        color: white;
+        padding: 18px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .product-card {
+        background: white;
+        margin: 15px;
+        padding: 15px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .product-img img {
+        width: 90px;
+        height: 90px;
+        border-radius: 6px;
+        object-fit: cover;
+    }
+
+    .product-info {
+        flex: 1;
+        font-size: 14px;
+    }
+
+    .product-info b {
+        font-size: 15px;
+    }
+
+    .btn-buy {
+        background: black;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+        /* --- NAVIGATION BAS --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #000;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 480px) {
+            .dashboard-header img {
+                height: 170px;
+            }
+        }
+
+</style>
+</head>
+
+<body>
+
+<div class="header">Investissements</div>
+
+{% for p in produits %}
+<div class="product-card">
+
+    <div class="product-img">
+        <img src="{{ url_for('static', filename='images/' + p.image) }}" alt="image vip">
+    </div>
+
+    <div class="product-info">
+        <b>{{ p.nom }}</b><br>
+        Période : {{ p.duree }} jours<br>
+        Revenu total : {{ "{:,.0f}".format(p.revenu_total)|replace(",", " ") }} FCFA<br>
+        Revenu quotidien : {{ "{:,.0f}".format(p.revenu_journalier)|replace(",", " ") }} FCFA<br>
+        Prix : {{ "{:,.0f}".format(p.prix)|replace(",", " ") }} FCFA
+    </div>
+
+    <form action="/investir/{{ p.id }}" method="GET">
+    <button class="btn-buy">Achat</button>
+    </form>
+
+</div>
+{% endfor %}
+
+    <!-- NAVIGATION DU BAS -->
+    <div class="bottom-nav">
+        <a href="/dashboard"><i class="fa-solid fa-house"></i>Maison</a>
+        <a href="/investissements"><i class="fa-solid fa-box"></i>Produits</a>
+        <a href="/team"><i class="fa-solid fa-users"></i>Équipe</a>
+        <a href="/profile"><i class="fa-solid fa-user"></i>Moi</a>
+    </div>
+
+</body>
+</html>

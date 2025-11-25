@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Investir{% endblock %}
+{% block content %}
+<h1>Investir dans {{ product.nom }}</h1>
+<div class="card">
+  <p>Montant minimum : <b>{{ "{:,.0f}".format(product.montant_min)|replace(",", " ") }} XOF</b></p>
+  <p>Durée : <b>{{ product.duree_jours }}</b> jours</p>
+  <p>Revenu quotidien : <b>{{ "{:,.0f}".format(product.revenu_quotidien)|replace(",", " ") }} XOF</b></p>
+  <p>Total à la fin : <b>{{ "{:,.0f}".format(product.rendement_total)|replace(",", " ") }} XOF</b></p>
+</div>
+
+<form method="POST" class="card form">
+  <p class="muted">Le montant investi sera débité de votre solde.</p>
+  <button class="btn primary" type="submit">Confirmer l’investissement</button>
+</form>
+{% endblock %}

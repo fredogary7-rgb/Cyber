@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jalonnement</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: #f3f4f6;
+    }
+
+    .header {
+        background: white;
+        padding: 18px;
+        text-align: center;
+        font-size: 19px;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .tabs {
+        display: flex;
+        margin: 15px;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        background: #ececec;
+        margin-right: 5px;
+    }
+
+    .tab.active {
+        background: #444;
+        color: white;
+    }
+
+    .product-card {
+        background: white;
+        padding: 18px;
+        margin: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .duration {
+        background: #ffe58f;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        float: right;
+        font-weight: bold;
+    }
+
+    .product-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 15px 0;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+        background: black;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 25px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="header">Jalonnement</div>
+
+<div class="tabs">
+    <div class="tab active">Liste des projets</div>
+    <div class="tab">Mes postes</div>
+    <div class="tab">Histoire</div>
+</div>
+
+<!-- VIP 2 -->
+<div class="product-card">
+    <span class="duration">15 jours</span>
+    <div class="product-title">VIP 1</div>
+
+    <p style="color:#d60000;font-size:18px;font-weight:bold;">
+        marge bénéficiaire : 1.80% ~ 2.20%
+    </p>
+
+    <input type="number" placeholder="Montant minimum : 8000 FCFA">
+
+    <button class="btn">Jalonner</button>
+</div>
+
+<!-- VIP 3 -->
+<div class="product-card">
+    <span class="duration">15 jours</span>
+    <div class="product-title">VIP 2</div>
+
+    <p style="color:#d60000;font-size:18px;font-weight:bold;">
+        marge bénéficiaire : 1.80% ~ 2.20%
+    </p>
+
+    <input type="number" placeholder="Montant minimum : 20000 FCFA">
+
+    <button class="btn">Jalonner</button>
+</div>
+
+<!-- VIP 4 -->
+<div class="product-card">
+    <span class="duration">15 jours</span>
+    <div class="product-title">VIP 3</div>
+
+    <p style="color:#d60000;font-size:18px;font-weight:bold;">
+        marge bénéficiaire : 1.80% ~ 2.20%
+    </p>
+
+    <input type="number" placeholder="Montant minimum : 40000 FCFA">
+
+    <button class="btn">Jalonner</button>
+</div>
+
+<!-- VIP 5 -->
+<div class="product-card">
+    <span class="duration">15 jours</span>
+    <div class="product-title">VIP 4</div>
+
+    <p style="color:#d60000;font-size:18px;font-weight:bold;">
+        marge bénéficiaire : 1.80% ~ 2.20%
+    </p>
+
+    <input type="number" placeholder="Montant minimum : 90000 FCFA">
+
+    <button class="btn">Jalonner</button>
+</div>
+
+</body>
+</html>

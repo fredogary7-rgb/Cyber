@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Presto Cash{% endblock %}</title>
+
+    <!-- 🧭 Style global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- ✅ Icônes FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+    <!-- 🟥 En-tête (logo + image principale) -->
+    <header class="header-banner">
+        <img src="{{ url_for('static', filename='images/banner.jpg') }}" alt="Bannière" class="banner-img">
+        <h1 class="brand-name">HONDA</h1>
+    </header>
+
+    <!-- 🧩 Barre de fonctions principales -->
+    <nav class="top-actions">
+        <div class="action-item">
+            <i class="fa-solid fa-credit-card"></i>
+            <p>Recharger</p>
+        </div>
+        <div class="action-item">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            <p>Retrait</p>
+        </div>
+        <div class="action-item">
+            <i class="fa-solid fa-headset"></i>
+            <p>Service client</p>
+        </div>
+        <div class="action-item">
+            <i class="fa-solid fa-gift"></i>
+            <p>Dépenses quotidiennes</p>
+        </div>
+    </nav>
+
+    <!-- 💰 Zone de solde -->
+    <section class="balance-section">
+        <div class="balance-box">
+            <p class="label">Solde du compte</p>
+            <p class="value">FCFA {{ "%.2f"|format(user.solde_total if user else 0) }}</p>
+        </div>
+        <div class="balance-box">
+            <p class="label">Revenu cumulé</p>
+            <p class="value">FCFA {{ "%.2f"|format(user.solde_revenu if user else 0) }}</p>
+        </div>
+    </section>
+
+    <!-- 📦 Contenu dynamique -->
+    <main class="page-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- ⚙️ Barre de navigation inférieure -->
+    <footer class="bottom-nav">
+        <a href="{{ url_for('dashboard_page') }}" class="nav-item {% if request.endpoint == 'dashboard_page' %}active{% endif %}">
+            <i class="fa-solid fa-house"></i><span>Maison</span>
+        </a>
+        <a href="{{ url_for('produits_rapide_page') }}" class="nav-item {% if request.endpoint == 'produits_rapide_page' %}active{% endif %}">
+            <i class="fa-solid fa-box"></i><span>Produit</span>
+        </a>
+        <a href="{{ url_for('dashboard_page') }}" class="nav-item center-btn">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+        <a href="{{ url_for('retrait_page') }}" class="nav-item {% if request.endpoint == 'retrait_page' %}active{% endif %}">
+            <i class="fa-solid fa-users"></i><span>Équipe</span>
+        </a>
+        <a href="{{ url_for('connexion_page') }}" class="nav-item">
+            <i class="fa-solid fa-user"></i><span>Moi</span>
+        </a>
+    </footer>
+
+</body>
+</html>

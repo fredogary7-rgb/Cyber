@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmation du retrait</title>
+
+<style>
+body {
+    background: #f3f4f6;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* --- CARD --- */
+.card {
+    background: white;
+    margin: 25px;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* --- TOAST --- */
+.toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 14px 25px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    display: none;
+    z-index: 9999;
+}
+
+.btn {
+    background: black;
+    color: white;
+    padding: 15px;
+    width: 90%;
+    margin: 25px auto;
+    text-align: center;
+    display: block;
+    border-radius: 30px;
+    font-weight: bold;
+    border: none;
+}
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center; font-weight:600; margin-top:20px;">Confirmer le retrait</h2>
+
+<div class="card">
+
+    <div class="row">
+        <span>Montant demandé :</span>
+        <strong>{{ montant }} FCFA</strong>
+    </div>
+
+    <div class="row">
+        <span>Impôt (15%) :</span>
+        <strong>{{ taxe }} FCFA</strong>
+    </div>
+
+    <div class="row">
+        <span>Montant reçu :</span>
+        <strong>{{ net }} FCFA</strong>
+    </div>
+
+    <hr style="margin: 20px 0;">
+
+    <h3>Portefeuille</h3>
+    <p><strong>{{ user.wallet_country }} • {{ user.wallet_operator }}</strong><br>
+    {{ user.wallet_number }}</p>
+
+</div>
+
+<form method="POST" onsubmit="showToast()">
+    <input type="hidden" name="montant" value="{{ montant }}">
+    <button class="btn" type="submit">Confirmer le retrait</button>
+</form>
+
+<!-- TOAST MESSAGE -->
+<div id="toast" class="toast">Retrait soumis avec succès</div>
+
+<script>
+function showToast() {
+    let t = document.getElementById("toast");
+    t.style.display = "block";
+
+    setTimeout(() => {
+        window.location.href = "/dashboard";
+    }, 2000);
+}
+</script>
+
+</body>
+</html>

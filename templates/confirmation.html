@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmation</title>
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .box {
+        margin: 80px auto;
+        background: white;
+        width: 90%;
+        max-width: 400px;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    img {
+        width: 110px;
+        margin-bottom: 10px;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .info {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 16px;
+        margin: 15px 0 10px;
+        font-weight: 600;
+        text-align: left;
+    }
+
+    .line {
+        border-top: 1px solid #ccc;
+        margin: 10px 0;
+    }
+
+    .revenu {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .cancel {
+        background: #d1d1d1;
+        padding: 12px 25px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .confirm {
+        background: black;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+    <img src="{{ url_for('static', filename='images/' + p.image) }}">
+
+    <div class="title">{{ p.nom }}</div>
+
+    <div class="info">
+        Période de validité : <b>{{ p.duree }} jours</b><br>
+        Prix : <b>FCFA {{ "{:,.0f}".format(p.prix)|replace(",", " ") }}</b>
+    </div>
+
+    <div class="section-title">Détails des revenus</div>
+    <div class="line"></div>
+
+    <div class="revenu">
+        <span>Revenu quotidien</span>
+        <b>+ {{ "{:,.0f}".format(p.revenu_journalier)|replace(",", " ") }}</b>
+    </div>
+
+    <div class="revenu">
+        <span>Revenu total</span>
+        <b>+ {{ "{:,.0f}".format(p.revenu_total)|replace(",", " ") }}</b>
+    </div>
+
+    <p style="font-size:13px; margin-top:15px;">
+        Chaque membre peut acheter plusieurs fois pour augmenter ses revenus.<br>
+        Après la période de validité, les bénéfices cessent.
+    </p>
+
+    <div class="buttons">
+        <a href="/investissements" class="cancel">Annuler</a>
+
+        <form method="POST">
+            <button class="confirm">Confirmer</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

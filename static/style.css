@@ -1,0 +1,174 @@
+/* === STYLE GLOBAL === */
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f6f8fa;
+    margin: 0;
+    padding-bottom: 80px; /* espace pour la nav */
+}
+
+/* === HEADER === */
+.header-banner {
+    position: relative;
+    text-align: left;
+    background: #fff;
+}
+
+.banner-img {
+    width: 100%;
+    border-bottom: 2px solid #ccc;
+}
+
+.brand-name {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 1.8em;
+    color: #c80000;
+    font-weight: bold;
+}
+
+/* === BARRE D’ACTIONS === */
+.top-actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #fff;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.action-item {
+    text-align: center;
+    color: #555;
+}
+
+.action-item i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.action-item p {
+    margin: 0;
+    font-size: 13px;
+}
+
+/* === SOLDE === */
+.balance-section {
+    display: flex;
+    justify-content: space-around;
+    background: #111;
+    color: #fff;
+    padding: 15px 0;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.balance-box {
+    text-align: center;
+}
+
+.balance-box .label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.balance-box .value {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* === CONTENU === */
+.page-content {
+    padding: 15px;
+}
+
+/* === NAVIGATION BASSE === */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    z-index: 999;
+}
+
+.nav-item {
+    text-align: center;
+    color: #777;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.nav-item i {
+    font-size: 20px;
+    display: block;
+}
+
+.nav-item.active {
+    color: #004aad;
+}
+
+.center-btn {
+    background: #004aad;
+    color: #fff !important;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 22px;
+    margin-top: -25px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* === WIDGET STATISTIQUES PREMIUM === */
+.stats-box {
+    width: 92%;
+    margin: 20px auto 25px auto;
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 20px;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.stats-box .stats-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 5px;
+}
+
+.stat-item i {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000;
+}
+
+.stat-text {
+    font-size: 13px;
+    color: #444;
+}

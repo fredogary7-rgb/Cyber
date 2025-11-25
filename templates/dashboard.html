@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CYBER-TRUCK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .dashboard-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        /* --- IMAGE DU HAUT --- */
+        .dashboard-header img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0 0 20px 20px;
+        }
+
+        /* --- SOLDE --- */
+        .account-info {
+            display: flex;
+            justify-content: space-around;
+            background-color: #000;
+            color: #fff;
+            padding: 15px 0;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .account-info div {
+            text-align: center;
+        }
+
+        .account-info small {
+            display: block;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        .account-info strong {
+            font-size: 17px;
+            color: #fff;
+        }
+
+        /* --- MENU ICONES --- */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 25px 10px 40px 10px;
+            text-align: center;
+        }
+
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .icon-item i {
+            font-size: 22px;
+            margin-bottom: 6px;
+            color: #000;
+        }
+
+        .icon-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- NAVIGATION BAS --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #000;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 480px) {
+            .dashboard-header img {
+                height: 170px;
+            }
+        }
+
+        /* --- WIDGET STATISTIQUES --- */
+.stats-widget {
+    width: 92%;
+    margin: 20px auto 120px auto;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.stats-title {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.stat-card {
+    background: #f6f6f6;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #555;
+}
+
+.stat-value {
+    margin-top: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- IMAGE DU HAUT -->
+        <div class="dashboard-header">
+            <img src="{{ url_for('static', filename='images/cyber1.jpg') }}" alt="Dashboard Honda">
+        </div>
+
+        <!-- BLOCS DE SOLDE -->
+        <div class="account-info">
+            <div>
+                <small>Solde du compte</small>
+                <strong>{{ "{:,.0f}".format(user.solde_total or 0)|replace(",", " ") }} XOF</strong>
+            </div>
+            <div>
+                <small>Revenu cumulé</small>
+                <strong>{{ "{:,.0f}".format(user.solde_revenu or 0)|replace(",", " ") }} XOF</strong>
+            </div>
+        </div>
+
+
+<!-- MENU ICONES -->
+<div class="icon-grid">
+
+    <div class="icon-item" onclick="window.location.href='/deposit'">
+        <i class="fa-solid fa-wallet"></i>
+        <span>Recharger</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='/retrait'">
+        <i class="fa-solid fa-money-bill-transfer"></i>
+        <span>Retrait</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='https://t.me/CyberAgence'">
+        <i class="fa-solid fa-headset"></i>
+        <span>Service client</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='/langue'">
+        <i class="fa-solid fa-language"></i>
+        <span>Langue</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='/annonce'">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Annonce</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='/produits_rapide'">
+        <i class="fa-solid fa-robot"></i>
+        <span>Produits IA</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='/jalonnement'">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Jalonnement</span>
+    </div>
+
+    <div class="icon-item" onclick="window.location.href='/finance'">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+        <span>Finance</span>
+    </div>
+
+</div>
+
+</div> <!-- FIN DU BLOC ICONES -->
+
+<!-- WIDGET STATISTIQUES (correct position) -->
+<div class="stats-widget">
+    <div class="stats-title">Statistiques du système</div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-label">Utilisateurs</span>
+            <span class="stat-value">{{ total_users }}</span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Dépôts totaux</span>
+            <span class="stat-value">{{ "{:,.0f}".format(total_deposits)|replace(",", " ") }} XOF</span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Investis</span>
+            <span class="stat-value">{{ "{:,.0f}".format(total_invested)|replace(",", " ") }} XOF</span>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-label">Retirés</span>
+            <span class="stat-value">{{ "{:,.0f}".format(total_withdrawn)|replace(",", " ") }} XOF</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAVIGATION BAS -->
+<div class="bottom-nav">
+    ...
+</div>
+
+    <!-- NAVIGATION DU BAS -->
+    <div class="bottom-nav">
+        <a href="/dashboard"><i class="fa-solid fa-house"></i>Maison</a>
+        <a href="/investissements"><i class="fa-solid fa-box"></i>Produits</a>
+        <a href="/team"><i class="fa-solid fa-users"></i>Équipe</a>
+        <a href="/profile"><i class="fa-solid fa-user"></i>Moi</a>
+    </div>
+
+</body>
+</html>

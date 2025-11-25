@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrait</title>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+}
+.header {
+    background: black;
+    padding: 25px;
+    color: white;
+}
+.soldes {
+    font-size: 30px;
+    font-weight: bold;
+}
+.sous-solde {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+}
+.card {
+    background: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 12px;
+}
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+.btn {
+    background: black;
+    color: white;
+    padding: 15px;
+    width: 90%;
+    margin: 20px auto;
+    text-align: center;
+    display: block;
+    border-radius: 25px;
+    font-weight: bold;
+    border: none;
+}
+.portefeuille {
+    background: #f1f1f1;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="account-info" style="background:#000; color:#fff; padding:20px 0;
+     display:flex; justify-content:space-around; border-radius:0 0 20px 20px;">
+
+    <div style="text-align:center;">
+        <small style="color:#ccc; font-size:14px;">Solde du compte</small>
+        <div style="font-size:22px; font-weight:bold;">
+            {{ "{:,.0f}".format(solde_total).replace(",", " ") }} XOF
+        </div>
+    </div>
+
+    <div style="text-align:center;">
+        <small style="color:#ccc; font-size:14px;">Solde retirable</small>
+        <div style="font-size:22px; font-weight:bold;">
+            {{ "{:,.0f}".format(solde_retraitable).replace(",", " ") }} XOF
+        </div>
+    </div>
+
+</div>
+
+<form method="POST">
+
+    <div class="card">
+        <h3>Montant du retrait</h3>
+
+        <input 
+            type="number" 
+            name="montant" 
+            id="montant" 
+            placeholder="Entrez le montant" 
+            required>
+
+        <p id="netText" style="color:red;font-weight:bold;">
+            Réception réelle : FCFA 0 — impôt : 15%
+        </p>
+
+        <h3>Compte de retrait</h3>
+
+        <div class="portefeuille" onclick="window.location.href='/ajouter_portefeuille'">
+            {{ user.wallet_country }} • {{ user.wallet_operator }}<br>
+            <strong>{{ user.wallet_number }}</strong>
+        </div>
+    </div>
+
+    <button class="btn" type="submit">Retirer maintenant</button>
+
+</form>
+
+<!-- 🔥 CALCUL AUTOMATIQUE DU MONTANT NET -->
+<script>
+document.getElementById("montant").addEventListener("input", function() {
+    let montant = parseFloat(this.value);
+    if (isNaN(montant) || montant <= 0) {
+        document.getElementById("netText").innerHTML = 
+            "Réception réelle : FCFA 0 — impôt : 15%";
+        return;
+    }
+
+    let taxe = montant * 0.15;
+    let net = montant - taxe;
+
+    document.getElementById("netText").innerHTML = 
+        "Réception réelle : <b>FCFA " + net.toLocaleString('fr-FR') + 
+        "</b> — impôt : 15%";
+});
+</script>
+
+</body>
+</html>

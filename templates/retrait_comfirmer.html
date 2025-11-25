@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Retrait soumis</title>
+
+<style>
+body {
+    background: #f3f4f6;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.card {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.check {
+    font-size: 60px;
+    color: #27ae60;
+    margin-bottom: 15px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.msg {
+    margin-top: 10px;
+    font-size: 15px;
+    color: #555;
+}
+
+.redirect {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+</style>
+
+<script>
+    setTimeout(function(){
+        window.location.href = "/dashboard";
+    }, 2000);
+</script>
+
+</head>
+<body>
+
+<div class="card">
+    <div class="check">✔️</div>
+
+    <div class="title">Retrait soumis avec succès</div>
+
+    <div class="msg">
+        Votre demande de retrait de <strong>{{ montant }} XOF</strong> a été envoyée.<br>
+        Elle est en attente de validation.
+    </div>
+
+    <div class="redirect">
+        Redirection vers le tableau de bord...
+    </div>
+</div>
+
+</body>
+</html>

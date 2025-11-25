@@ -1,0 +1,10 @@
+from app import app, db
+
+with app.app_context():
+    print("🔄 Suppression des tables...")
+    db.drop_all()
+
+    print("🆕 Création des nouvelles tables...")
+    db.create_all()
+
+    print("✅ Base de données réinitialisée avec succès !")

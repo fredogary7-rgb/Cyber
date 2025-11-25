@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Confirmation retrait{% endblock %}
+{% block content %}
+<h1>Confirmation</h1>
+<div class="card">
+  <p>Montant demandé : <b>{{ "{:,.2f}".format(amount)|replace(",", " ") }} XOF</b></p>
+  <p>Frais (10%) : <b>{{ "{:,.2f}".format(frais)|replace(",", " ") }} XOF</b></p>
+  <p>Montant net : <b class="green">{{ "{:,.2f}".format(net_amount)|replace(",", " ") }} XOF</b></p>
+  <p>Méthode : <b>{{ method }}</b></p>
+  <p>Réception : <b>{{ address_or_number }}</b></p>
+</div>
+<p class="muted">Votre demande est enregistrée et sera traitée par l’admin.</p>
+<a class="btn" href="{{ url_for('dashboard_page') }}">Retour au dashboard</a>
+{% endblock %}

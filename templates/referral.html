@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Parrainage{% endblock %}
+{% block content %}
+<h1>Parrainage</h1>
+
+<div class="card">
+  <p>Votre lien :<br>
+    <input class="mono" type="text" readonly value="{{ referral_link }}" onclick="this.select()">
+  </p>
+</div>
+
+<h3>Vos filleuls</h3>
+<table class="table">
+  <thead><tr><th>Utilisateur</th><th>Email</th><th>Total dépôt validé (XOF)</th></tr></thead>
+  <tbody>
+    {% for f in filleuls %}
+    <tr>
+      <td>{{ f.username }}</td>
+      <td>{{ f.email }}</td>
+      <td>{{ "{:,.0f}".format(f.total_depot)|replace(",", " ") }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="3" class="muted">Aucun filleul.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

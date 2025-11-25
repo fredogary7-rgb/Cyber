@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Confirmation</title>
+<style>
+.page {
+    text-align:center;
+    padding:20px;
+}
+.img {
+    width:130px;
+    height:130px;
+    border-radius:15px;
+}
+.btn {
+    background:black;
+    color:white;
+    padding:12px 25px;
+    border-radius:25px;
+    border:none;
+    margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <img src="{{ url_for('static', filename='images/' + p.image) }}" class="img">
+
+    <h2>{{ p.nom }}</h2>
+    <p>Période : 14 jours</p>
+    <p>Revenu quotidien : + {{ p.revenu_journalier }} FCFA</p>
+    <p>Prix : FCFA {{ p.prix }}</p>
+
+    <form method="POST" action="/produits_rapide/acheter/{{ p.id }}">
+        <button class="btn">Confirmer</button>
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation du retrait</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #f1f1f1;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .card {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .info-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            font-size: 15px;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-confirm {
+            width: 90%;
+            margin: 20px auto;
+            display: block;
+            background: #000;
+            color: white;
+            padding: 15px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 600;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Confirmer le retrait</h2>
+
+    <div class="info-line">
+        <span>Montant demandé :</span>
+        <span>{{ montant }} XOF</span>
+    </div>
+
+    <div class="info-line">
+        <span>Frais (15%) :</span>
+        <span>{{ frais }} XOF</span>
+    </div>
+
+    <div class="info-line total">
+        <span>Montant reçu :</span>
+        <span>{{ net }} XOF</span>
+    </div>
+
+    <hr>
+
+    <div class="info-line">
+        <span>Pays :</span>
+        <span>{{ user.wallet_country }}</span>
+    </div>
+
+    <div class="info-line">
+        <span>Opérateur :</span>
+        <span>{{ user.wallet_operator }}</span>
+    </div>
+
+    <div class="info-line">
+        <span>Numéro :</span>
+        <span>{{ user.wallet_number }}</span>
+    </div>
+
+    <form method="POST" action="/retrait_confirm">
+        <input type="hidden" name="montant" value="{{ montant }}">
+        <button class="btn-confirm" type="submit">Confirmer</button>
+    </form>
+
+</div>
+
+</body>
+</html>

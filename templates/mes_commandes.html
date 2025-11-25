@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}Mes commandes{% endblock %}
+{% block content %}
+<h1>Mes investissements</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Produit</th>
+      <th>Montant (XOF)</th>
+      <th>Début</th>
+      <th>Durée (j)</th>
+      <th>Statut</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in investissements %}
+    <tr>
+      <td>{{ i.product_id }}</td>
+      <td>{{ "{:,.0f}".format(i.montant)|replace(",", " ") }}</td>
+      <td>{{ i.date_debut.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>{{ i.duree_jours }}</td>
+      <td>{{ i.status }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">Aucun investissement.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

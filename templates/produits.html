@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Produits{% endblock %}
+{% block content %}
+<h1>Produits d’investissement</h1>
+<div class="grid-cards">
+  {% for p in products %}
+  <div class="card product">
+    <h3>{{ p.nom }}</h3>
+    <ul class="specs">
+      <li>Montant min : <b>{{ "{:,.0f}".format(p.montant_min)|replace(",", " ") }} XOF</b></li>
+      <li>Durée : <b>{{ p.duree_jours }}</b> jours</li>
+      <li>Revenu quotidien : <b>{{ "{:,.0f}".format(p.revenu_quotidien)|replace(",", " ") }} XOF</b></li>
+      <li>Total à la fin : <b>{{ "{:,.0f}".format(p.rendement_total)|replace(",", " ") }} XOF</b></li>
+    </ul>
+    <p class="muted">{{ p.description }}</p>
+    <a class="btn primary" href="{{ url_for('investir', product_id=p.id) }}">Investir</a>
+  </div>
+  {% else %}
+  <div class="muted">Aucun produit disponible.</div>
+  {% endfor %}
+</div>
+{% endblock %}

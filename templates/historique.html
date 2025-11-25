@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Historique{% endblock %}
+{% block content %}
+<h1>Historique</h1>
+<ul class="list">
+  {% for e in entries %}
+  <li class="list-row">
+    <div>
+      <div class="title">{{ e.desc }}</div>
+      <div class="muted small">{{ e.date }}</div>
+      {% if e.solde_apres is not none %}
+        <div class="muted xsmall">Solde après : {{ "{:,.0f}".format(e.solde_apres)|replace(",", " ") }} XOF</div>
+      {% endif %}
+    </div>
+    <div class="amount {{ 'green' if e.montant>=0 else 'red' }}">{{ "{:,.0f}".format(e.montant)|replace(",", " ") }} XOF</div>
+    <div class="status">{{ e.status }}</div>
+  </li>
+  {% else %}
+  <li class="muted">Aucune opération.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+    }
+
+    .user-box {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        background: white;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .user-img {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .user-info .phone {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .balance {
+        display: block;
+        margin-top: 5px;
+        color: #444;
+        font-size: 14px;
+    }
+
+    /* --- BOUTONS RECHARGER / RETRAIT --- */
+    .actions {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px 15px;
+        background: white;
+        border-bottom: 1px solid #ddd;
+        gap: 15px;
+    }
+
+    .btn {
+        flex: 1;
+        text-align: center;
+        padding: 15px 0;
+        border-radius: 14px;
+        font-weight: bold;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-recharge {
+        background: #27ae60;
+    }
+
+    .btn-retrait {
+        background: #e74c3c;
+    }
+
+    /* --- MENU --- */
+    .menu {
+        margin-top: 10px;
+        background: white;
+        padding: 10px 0;
+    }
+
+    .menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        font-size: 15px;
+    }
+
+    .menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .menu-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .menu-left img {
+        width: 22px;
+        height: 22px;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .logout {
+        color: red;
+        font-weight: bold;
+    }
+
+        /* --- NAVIGATION BAS --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #000;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 480px) {
+            .dashboard-header img {
+                height: 170px;
+            }
+        }
+
+</style>
+</head>
+
+<body>
+
+<!-- IDENTITÉ UTILISATEUR -->
+<div class="user-box">
+    <img src="{{ url_for('static', filename='images/cyber1.jpg') }}" class="user-img">
+
+    <div class="user-info">
+        <div class="phone">{{ user.phone }}</div>
+        <span class="balance">Solde du compte : {{ "{:,.0f}".format(user.solde_total or 0) }} XOF</span>
+    </div>
+</div>
+
+<!-- BOUTONS -->
+<div class="actions">
+    <a href="/deposit">
+        <button class="btn btn-recharge">Faire un recharge</button>
+    </a>
+
+    <a href="/retrait">
+        <button class="btn btn-retrait">Retirer de l'argent</button>
+    </a>
+</div>
+
+<!-- MENU -->
+<div class="menu">
+
+    <a href="https://t.me/+SzrlLBpMR_NmYzg0" target="_blank">
+        <div class="menu-item">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+                <span>Groupe Telegram</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="/jalonnement">
+        <div class="menu-item">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2666/2666500.png">
+                <span>Jalonnement</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="/investissements">
+        <div class="menu-item">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828665.png">
+                <span>Historique des produits</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="/support">
+        <div class="menu-item">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png">
+                <span>Service client</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="/langue">
+        <div class="menu-item">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2913/2913465.png">
+                <span>Paramètres de langue</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="/finance">
+        <div class="menu-item">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2769/2769344.png">
+                <span>Dossiers financiers</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="/logout">
+        <div class="menu-item logout">
+            <div class="menu-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png">
+                <span>Déconnexion</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+</div>
+
+    <!-- NAVIGATION DU BAS -->
+    <div class="bottom-nav">
+        <a href="/dashboard"><i class="fa-solid fa-house"></i>Maison</a>
+        <a href="/investissements"><i class="fa-solid fa-box"></i>Produits</a>
+        <a href="/team"><i class="fa-solid fa-users"></i>Équipe</a>
+        <a href="/profile"><i class="fa-solid fa-user"></i>Moi</a>
+    </div>
+
+</body>
+</html>

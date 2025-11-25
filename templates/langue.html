@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Langue</title>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: #f3f4f6;
+}
+
+.header {
+    background: black;
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.card {
+    background: white;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.lang-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.lang-item:last-child {
+    border-bottom: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">Langue</div>
+
+<div class="card">
+
+    <div class="lang-item" onclick="chooseLang('fr')">
+        🇫🇷 Français  
+    </div>
+
+    <div class="lang-item" onclick="chooseLang('en')">
+        🇬🇧 English  
+    </div>
+
+    <div class="lang-item" onclick="chooseLang('es')">
+        🇪🇸 Español  
+    </div>
+
+    <div class="lang-item" onclick="chooseLang('cn')">
+        🇨🇳 中文  
+    </div>
+
+</div>
+
+<script>
+function chooseLang(lang) {
+    window.location.href = "/set_lang/" + lang;
+}
+</script>
+
+</body>
+</html>

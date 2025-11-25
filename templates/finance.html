@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background: #f3f4f6;
+    }
+
+    .header {
+        background: black;
+        padding: 18px;
+        color: white;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .card {
+        background: white;
+        margin: 15px;
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .value-big {
+        font-size: 26px;
+        font-weight: bold;
+        color: black;
+    }
+
+    .line {
+        margin: 6px 0;
+        font-size: 14px;
+    }
+
+    .item {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+
+    .item:last-child {
+        border-bottom: none;
+    }
+
+    small {
+        color: #666;
+    }
+
+        /* --- MENU ICONES --- */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 25px 10px 40px 10px;
+            text-align: center;
+        }
+
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .icon-item i {
+            font-size: 22px;
+            margin-bottom: 6px;
+            color: #000;
+        }
+
+        .icon-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- NAVIGATION BAS --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #000;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 480px) {
+            .dashboard-header img {
+                height: 170px;
+            }
+        }
+</style>
+</head>
+
+<body>
+
+<div class="header">Finance</div>
+
+<!-- FORTUNE TOTALE -->
+<div class="card">
+    <div class="title">Fortune totale</div>
+    <div class="value-big">
+        FCFA {{ "{:,.0f}".format(fortune_totale)|replace(",", " ") }}
+    </div>
+    <div class="line">Solde dépôt : {{ "{:,.0f}".format(user.solde_depot)|replace(",", " ") }} FCFA</div>
+    <div class="line">Revenus cumulés : {{ "{:,.0f}".format(revenus_totaux)|replace(",", " ") }} FCFA</div>
+</div>
+
+<!-- REVENUS -->
+<div class="card">
+    <div class="title">Revenus</div>
+
+    <div class="line">Revenus du parrainage :
+        <b>{{ "{:,.0f}".format(user.solde_parrainage)|replace(",", " ") }} FCFA</b>
+    </div>
+
+    <div class="line">Revenus des investissements :
+        <b>{{ "{:,.0f}".format(user.solde_revenu)|replace(",", " ") }} FCFA</b>
+    </div>
+</div>
+
+<!-- INVESTISSEMENTS ACTIFS -->
+<div class="card">
+    <div class="title">Mes actifs en cours</div>
+
+    {% if actifs %}
+        {% for a in actifs %}
+            <div class="item">
+                <b>{{ a.montant }} FCFA</b><br>
+                <small>+ {{ a.revenu_journalier }} / jour — 
+                {{ a.duree }} jours — 
+                Début : {{ a.date_debut.strftime("%d/%m/%Y") }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <small>Aucun investissement actif.</small>
+    {% endif %}
+</div>
+
+<!-- HISTORIQUE DES RETRAITS -->
+<div class="card">
+    <div class="title">Historique des retraits</div>
+
+    {% if retraits %}
+        {% for r in retraits %}
+            <div class="item">
+                - {{ "{:,.0f}".format(r.montant)|replace(",", " ") }} FCFA  
+                <br>
+                <small>{{ r.date.strftime("%d/%m/%Y") }} — {{ r.statut }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <small>Aucun retrait effectué.</small>
+    {% endif %}
+</div>
+
+    <!-- NAVIGATION DU BAS -->
+    <div class="bottom-nav">
+        <a href="/dashboard"><i class="fa-solid fa-house"></i>Maison</a>
+        <a href="/investissements"><i class="fa-solid fa-box"></i>Produits</a>
+        <a href="/team"><i class="fa-solid fa-users"></i>Équipe</a>
+        <a href="/profile"><i class="fa-solid fa-user"></i>Moi</a>
+    </div>
+
+</body>
+</html>
