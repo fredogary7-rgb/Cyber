@@ -106,7 +106,7 @@ class Commission(db.Model):
 
 def donner_commission(filleul_phone, montant):
     # Niveaux : 30% – 5% – 3%
-    COMMISSIONS = {1: 0.30, 2: 0.05, 3: 0.03}
+    COMMISSIONS = {1: 0.20, 2: 0.03, 3: 0.01}
 
     current_phone = filleul_phone
 
