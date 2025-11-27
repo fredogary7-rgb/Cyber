@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Admin Vlog</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background:#f4f4f4;
+    }
+    h2 {
+        text-align:center;
+        margin:25px 0;
+    }
+
+    .box {
+        background:white;
+        padding:15px;
+        width:95%;
+        margin:10px auto;
+        border-radius:10px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .box img {
+        width:120px;
+        height:120px;
+        object-fit:cover;
+        border-radius:8px;
+        border:1px solid #ddd;
+    }
+
+    .row {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .status {
+        font-weight: bold;
+        padding:5px 10px;
+        border-radius:6px;
+    }
+
+    .pending {
+        background:orange;
+        color:white;
+    }
+    .ok {
+        background:green;
+        color:white;
+    }
+    .reject {
+        background:red;
+        color:white;
+    }
+
+    .actions a {
+        padding:8px 12px;
+        margin-left:5px;
+        border-radius:6px;
+        color:white;
+        text-decoration:none;
+        font-size:14px;
+    }
+    .btn-valid {
+        background:green;
+    }
+    .btn-reject {
+        background:red;
+    }
+</style>
+</head>
+<body>
+
+<h2>Admin – Vlogs Retraits</h2>
+
+{% if vlogs|length == 0 %}
+<p style="text-align:center;color:#555;">Aucun vlog enregistré pour le moment</p>
+{% endif %}
+
+{% for v in vlogs %}
+<div class="box">
+
+    <div class="row">
+
+        <!-- IMAGE OU PLACEHOLDER -->
+        <img src="{{ url_for('static', filename='vlogs/' + (v.image or 'placeholder.jpg')) }}">
+
+        <div>
+            <p><strong>Numéro :</strong> {{ v.phone }}</p>
+            <p><strong>Montant retiré :</strong> {{ v.montant }} XOF</p>
+
+            {% if v.statut == 'valide' %}
+                <span class="status ok">Validé</span>
+            {% elif v.statut == 'rejete' %}
+                <span class="status reject">Rejeté</span>
+            {% else %}
+                <span class="status pending">En attente</span>
+            {% endif %}
+        </div>
+
+        <div class="actions">
+            {% if v.statut != 'valide' %}
+            <a class="btn-valid" href="/admin/vlog/valider/{{ v.id }}">Valider</a>
+            {% endif %}
+
+            {% if v.statut != 'rejete' %}
+            <a class="btn-reject" href="/admin/vlog/rejeter/{{ v.id }}">Rejeter</a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endfor %}
+
+</body>
+</html>

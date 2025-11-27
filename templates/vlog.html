@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vlog – Preuve de retrait</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+        padding: 15px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        background: #fff;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 6px;
+        font-weight: 500;
+    }
+
+    input[type="number"],
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #000;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    #loader {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.65);
+        color: #fff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 600;
+        z-index: 9999;
+        text-align: center;
+    }
+
+    /* Liste des preuves */
+    .vlog-item {
+        background:#fff;
+        padding:10px;
+        margin-bottom:10px;
+        border-radius:10px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        border:1px solid #ddd;
+    }
+
+    .vlog-item img{
+        width:70px;
+        height:70px;
+        object-fit:cover;
+        border-radius:7px;
+        margin-right:10px;
+    }
+
+    .status-attente{color:orange;font-weight:bold;}
+    .status-valide{color:green;font-weight:bold;}
+    .status-refuse{color:red;font-weight:bold;}
+</style>
+</head>
+<body>
+
+<h2>VLOG – preuve de retrait</h2>
+
+<form id="vlogForm" method="POST" enctype="multipart/form-data">
+
+    <label for="photo">Preuve de retrait</label>
+    <input id="photo" type="file" name="photo" accept="image/*" required>
+
+    <label for="montant">Montant retiré (XOF)</label>
+    <input id="montant" type="number" name="montant" min="1" required>
+
+    <button id="btnSend" type="submit">Envoyer</button>
+</form>
+
+<!-- Historique -->
+<h3>Mes preuves envoyées</h3>
+
+{% for v in vlogs %}
+<div class="vlog-item">
+
+     {% if v.image %}
+    <img src="{{ url_for('static', filename='vlogs/' + v.image) }}">
+{% else %}
+    <span>Pas d'image</span>
+{% endif %}
+
+    <div>
+        <div>{{ v.montant }} XOF</div>
+        <div>
+            {% if v.statut == 'valide' %}
+                <span class="status-valide">Validé ✔</span>
+            {% elif v.statut == 'refuse' %}
+                <span class="status-refuse">Rejeté ✖</span>
+            {% else %}
+                <span class="status-attente">En attente…</span>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endfor %}
+
+<!-- Loader -->
+<div id="loading">Partagez vos capture des retraits et recevez une commission de 10%</div>
+
+<script>
+    const form = document.getElementById("vlogForm");
+    const loader = document.getElementById("loading");
+    const btn = document.getElementById("btnSend");
+
+    form.addEventListener("submit", function () {
+        btn.disabled = true;
+        loader.style.display = "flex";
+        setTimeout(() => loader.textContent = "Envoyé ✔", 1000);
+    });
+</script>
+
+</body>
+</html>

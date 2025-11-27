@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrait en cours...</title>
+
+<style>
+body {
+    background: #f3f4f6;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding-top: 120px;
+}
+
+/* Animation loader */
+.loader {
+    border: 5px solid #ddd;
+    border-top: 5px solid black;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.message {
+    margin-top: 25px;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.success {
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 15px;
+}
+</style>
+</head>
+<body>
+
+<div class="loader"></div>
+
+<div class="message">Traitement du retrait...</div>
+
+<div class="success" id="successMsg" style="display:none;">
+    ✔ Retrait soumis avec succès !
+</div>
+
+<script>
+setTimeout(() => {
+    document.getElementById("successMsg").style.display = "block";
+}, 1000);
+
+setTimeout(() => {
+    window.location.href = "/dashboard";
+}, 2000);
+</script>
+
+</body>
+</html>

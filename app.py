@@ -1,3 +1,5 @@
+import os
+from werkzeug.utils import secure_filename
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import datetime
@@ -7,6 +9,9 @@ import uuid
 from datetime import datetime, timedelta
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "ma_cle_ultra_secrete"
+
+UPLOAD_FOLDER = "static/vlogs"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 DEFAULT_DB = "postgresql+psycopg2://neondb_owner:npg_5kDyFqm3iAwr@ep-dawn-wind-abvkgdcp-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require"
 app.config["SQLALCHEMY_DATABASE_URI"] = DEFAULT_DB
@@ -102,6 +107,14 @@ class Commission(db.Model):
     filleul_phone = db.Column(db.String(30))    # celui qui a fait l'action
     montant = db.Column(db.Float)
     niveau = db.Column(db.Integer)              # 1, 2 ou 3
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Vlog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    phone = db.Column(db.String(30))
+    montant = db.Column(db.Float)
+    image = db.Column(db.String(200))
+    statut = db.Column(db.String(20), default="en_attente") # en_attente / valide / rejete
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
 def donner_commission(filleul_phone, montant):
@@ -779,7 +792,6 @@ def retrait_confirmation_page(montant):
         if reste > 0:
             user.solde_revenu -= reste
 
-        user.solde_total -= montant  # 🔥 Déduire aussi du solde total
 
         db.session.commit()
 
@@ -1071,18 +1083,104 @@ def refuser_retrait(retrait_id):
 
     # On rembourse d'abord le solde_parrainage jusqu'à ce qu'il atteigne 0
     # Puis le reste va dans solde_revenu
-    user.solde_parrainage += montant  
     # Si tu veux séparer les sources (revenu/parrainage) on peut le faire différemment.
     # Mais ici tu veux simplement recréditer le montant refusé.
 
-    user.solde_total += montant
-
+    user.solde_revenu += montant
     retrait.statut = "refusé"
     db.session.commit()
 
     flash("Retrait refusé et montant recrédité à l’utilisateur.", "warning")
     return redirect("/admin/retraits")
 
+@app.route("/admin/vlog")
+def admin_vlog():
+    vlogs = Vlog.query.order_by(Vlog.date.desc()).all()
+    return render_template("admin_vlog.html", vlogs=vlogs)
+
+@app.route("/admin/vlog/valider/<int:id>")
+def admin_vlog_valider(id):
+    vlog = Vlog.query.get_or_404(id)
+    user = User.query.filter_by(phone=vlog.phone).first()
+
+    if not user:
+        flash("Utilisateur introuvable", "danger")
+        return redirect("/admin/vlog")
+
+    if vlog.statut == "valide":
+        flash("Déjà validé", "warning")
+        return redirect("/admin/vlog")
+
+    bonus = vlog.montant * 0.10
+
+    user.solde_revenu += bonus
+
+    vlog.statut = "valide"
+    db.session.commit()
+
+    flash(f"Bonus {bonus} XOF crédité !", "success")
+    return redirect("/admin/vlog")
+
+@app.route("/admin/vlog/rejeter/<int:vlog_id>")
+def rejeter_vlog(vlog_id):
+    vlog = Vlog.query.get_or_404(vlog_id)
+    user = User.query.filter_by(phone=vlog.phone).first()
+
+    vlog.statut = "rejete"
+    db.session.commit()
+
+    flash("Preuve rejetée avec succès !", "warning")
+    return redirect("/admin/vlog")
+
+
+
+@app.route("/vlog", methods=["GET", "POST"])
+@login_required
+def vlog_page():
+    phone = get_logged_in_user_phone()
+    user = User.query.filter_by(phone=phone).first()
+
+    # Vérifier si l'utilisateur a fait un retrait dans les 24h
+    retrait_recent = Retrait.query.filter(
+    Retrait.phone == phone,
+    Retrait.statut.in_(["validé", "valider", "approved"])
+        ).order_by(Retrait.date.desc()).first()
+
+    if not retrait_recent or (datetime.utcnow() - retrait_recent.date) > timedelta(hours=24):
+        flash("Vous n'avez pas effectué un retrait dans les dernières 24h.", "danger")
+        return redirect(url_for("dashboard_page"))
+
+    # ----------- SI POST (envoi du vlog) ----------
+    if request.method == "POST":
+        montant = float(request.form["montant"])
+        file = request.files["photo"]
+
+        filename = secure_filename(file.filename)
+
+        # créer le dossier si n’existe pas
+        folder = "static/vlogs"
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        path = os.path.join(folder, filename)
+        file.save(path)
+
+        vlog = Vlog(
+            phone=phone,
+            montant=montant,
+            image=filename,
+            statut="en_attente"
+        )
+        db.session.add(vlog)
+        db.session.commit()
+
+        return render_template("vlog_loading.html")
+
+    # ----------- affichage des preuves du user =====
+    vlogs = Vlog.query.filter_by(phone=phone)\
+        .order_by(Vlog.date.desc()).all()
+
+    return render_template("vlog.html", user=user, vlogs=vlogs)
 
 @app.route("/cron/pay_invests")
 def cron_pay_invests():
