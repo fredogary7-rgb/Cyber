@@ -932,6 +932,46 @@ def profile_page():
 
     return render_template("profile.html", user=user)
 
+def get_image(montant):
+    mapping = {
+        3000: "cyber1.jpg",
+        8000: "cyber2.jpg",
+        20000: "cyber3.jpg",
+        40000: "cyber4.jpg",
+        90000: "cyber5.jpg",
+        180000: "cyber6.jpg",
+        400000: "cyber7.jpg",
+        800000: "cyber8.jpg",
+    }
+    return mapping.get(int(montant), "cyber1.jpg")
+
+@app.route("/historique")
+@login_required
+def historique_invest_page():
+    phone = get_logged_in_user_phone()
+
+    investissements = []
+
+    now = datetime.now()   # 👍 PAS DE WARNING
+
+    for inv in Investissement.query.filter_by(phone=phone).all():
+
+        jours_passes = (now - inv.date_debut).days
+        progression = int((jours_passes / inv.duree) * 100)
+        progression = min(progression, 100)
+        jours_restants = max(inv.duree - jours_passes, 0)
+
+        investissements.append({
+            "nom": f"prix {inv.montant}",
+            "revenu_journalier": inv.revenu_journalier,
+            "jours_restants": jours_restants,
+            "progression": progression,
+            "image": get_image(inv.montant)
+        })
+
+    return render_template("historique_invest.html",
+                           investissements=investissements)
+
 @app.route('/team')
 @login_required
 def team_page():
