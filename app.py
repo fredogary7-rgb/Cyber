@@ -393,9 +393,7 @@ def dashboard_page():
         user=user,
         revenu_cumule=revenu_cumule,  # 🔥 envoi au HTML
         total_users=total_users,
-        total_deposits=total_deposits,
         total_invested=total_invested,
-        total_withdrawn=total_withdrawn
     )
 
 @app.route("/investissements")
