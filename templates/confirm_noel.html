@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmer l'achat - {{ p.nom if p else 'Offre' }}</title>
+
+<style>
+    body {
+        background: #fff;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .card {
+        background: white;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    img.product-img {
+        width: 140px;
+        height: 140px;
+        border-radius: 12px;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 15px;
+        margin: 6px 0;
+    }
+
+    h2 {
+        margin: 10px 0;
+        font-size: 22px;
+    }
+
+    .btn {
+        background: black;
+        color: white;
+        padding: 15px;
+        width: 85%;
+        margin: 12px auto;
+        border-radius: 30px;
+        border: none;
+        font-size: 17px;
+        font-weight: bold;
+        display: block;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='images/' + p.image) }}"
+         alt="Image de l'offre {{ p.nom }}"
+         class="product-img">
+
+    <h2>{{ p.nom }}</h2>
+
+    <p>Période : <b>7 jours</b></p>
+    <p>Prix : <b>{{ "{:,.0f}".format(p.prix) }} FCFA</b></p>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <h3>Détails de l'offre</h3>
+    <p>Revenu quotidien : <b>+ {{ "{:,.0f}".format(p.revenu_journalier) }} FCFA</b></p>
+    <p>Revenu total (7 jours) : <b>+ {{ "{:,.0f}".format(revenu_total) }} FCFA</b></p>
+</div>
+
+<a href="{{ url_for('offres_noel_page') }}" class="btn btn-cancel" role="button">
+    Annuler
+</a>
+
+<form method="POST" action="{{ url_for('confirmer_offre_noel', prod_id=p.id) }}">
+    <button class="btn" type="submit">Confirmer l'achat</button>
+</form>
+
+</body>
+</html>

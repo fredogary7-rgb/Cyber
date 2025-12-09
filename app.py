@@ -706,6 +706,130 @@ def wallet_setup_page():
 
     return render_template("wallet_setup.html")
 
+
+# 🎄 Offres Noël
+OFFRES_NOEL = [
+    {"id": 1, "nom": "VIP 1", "prix": 3000,
+     "revenu_journalier": int((3000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(3000 * 1.75), "image": "cyber1.jpg"},
+
+    {"id": 2, "nom": "VIP 2", "prix": 8000,
+     "revenu_journalier": int((8000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(8000 * 1.75), "image": "cyber2.jpg"},
+
+    {"id": 3, "nom": "VIP 3", "prix": 20000,
+     "revenu_journalier": int((20000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(20000 * 1.75), "image": "cyber3.jpg"},
+
+    {"id": 4, "nom": "VIP 4", "prix": 40000,
+     "revenu_journalier": int((40000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(40000 * 1.75), "image": "cyber4.jpg"},
+
+    {"id": 5, "nom": "VIP 5", "prix": 90000,
+     "revenu_journalier": int((90000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(90000 * 1.75), "image": "cyber5.jpg"},
+
+    {"id": 6, "nom": "VIP 6", "prix": 180000,
+     "revenu_journalier": int((180000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(180000 * 1.75), "image": "cyber6.jpg"},
+
+    {"id": 7, "nom": "VIP 7", "prix": 400000,
+     "revenu_journalier": int((400000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(400000 * 1.75), "image": "cyber7.jpg"},
+
+    {"id": 8, "nom": "VIP 8", "prix": 800000,
+     "revenu_journalier": int((800000 * 0.75) / 7), "duree": 7,
+     "revenu_total": int(800000 * 1.75), "image": "cyber8.jpg"}
+]
+
+@app.route("/offres_noel")
+@login_required
+def offres_noel_page():
+    phone = get_logged_in_user_phone()
+    user = User.query.filter_by(phone=phone).first()
+
+    max_invest = db.session.query(db.func.max(Investissement.montant)) \
+        .filter_by(phone=phone, actif=True).scalar() or 0
+
+    return render_template(
+        "offres_noel.html",
+        user=user,
+        produits=OFFRES_NOEL,
+        max_invest=max_invest
+    )
+
+
+@app.route("/offres_noel/valider/<int:prod_id>", methods=["POST"])
+@login_required
+def valider_offre_noel(prod_id):
+    phone = get_logged_in_user_phone()
+    user = User.query.filter_by(phone=phone).first()
+
+    produit = next((p for p in OFFRES_NOEL if p["id"] == prod_id), None)
+    if not produit:
+        flash("Offre introuvable.", "danger")
+        return redirect(url_for("offres_noel_page"))
+
+    montant = produit["prix"]
+
+    if user.solde_total < montant:
+        flash("Solde insuffisant.", "danger")
+        return redirect(url_for("offres_noel_page"))
+
+    # Enregistrer en attente de confirmation
+    return redirect(url_for("confirmer_offre_noel", prod_id=prod_id))
+
+
+@app.route("/offres_noel/confirmer/<int:prod_id>", methods=["GET", "POST"])
+@login_required
+def confirmer_offre_noel(prod_id):
+    phone = get_logged_in_user_phone()
+    user = User.query.filter_by(phone=phone).first()
+
+    # Recherche du produit
+    produit = next((p for p in OFFRES_NOEL if p["id"] == prod_id), None)
+    if not produit:
+        flash("Offre introuvable.", "danger")
+        return redirect(url_for("offres_noel_page"))
+
+    montant = produit["prix"]
+    revenu_journalier = produit["revenu_journalier"]
+    revenu_total = produit["revenu_total"]
+    # --- Affichage du template (GET)
+    if request.method == "GET":
+        return render_template(
+            "confirm_noel.html",
+            p=produit,  # clé `p` pour correspondre au template
+            revenu_total=revenu_total,
+            user=user
+        )
+
+    # --- Validation de l’achat (POST)
+    if float(user.solde_total or 0) < montant:
+        flash("Solde insuffisant.", "danger")
+        return redirect(url_for("offres_noel_page"))
+
+    # Débiter le solde
+    user.solde_total -= montant
+
+    # Créer un investissement
+    inv = Investissement(
+        phone=phone,
+        montant=montant,
+        revenu_journalier=revenu_journalier,
+        duree=7,
+        actif=True
+    )
+    db.session.add(inv)
+    db.session.commit()
+
+    # Page de chargement / confirmation
+    return render_template(
+        "achat_rapide_loader.html",
+        produit=produit,
+        montant=montant
+    )
+
 @app.route("/retrait", methods=["GET", "POST"])
 @login_required
 def retrait_page():
