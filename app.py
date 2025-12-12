@@ -533,22 +533,81 @@ PRODUITS_VIP = [
     {"id": 8, "nom": "VIP 8", "prix": 800000, "revenu_journalier": 220000, "image": "cyber8.jpg"}
 ]
 
+# ============================
+# PAGE PRODUITS RAPIDES
+# ============================
 @app.route("/produits_rapide")
 @login_required
 def produits_rapide_page():
     phone = get_logged_in_user_phone()
     user = User.query.filter_by(phone=phone).first()
 
-    max_invest = db.session.query(db.func.max(Investissement.montant)) \
-        .filter_by(phone=phone, actif=True).scalar() or 0
-
     return render_template(
         "produits_rapide.html",
         user=user,
-        produits=PRODUITS_VIP,
-        max_invest=max_invest
+        produits=PRODUITS_VIP
     )
 
+
+# ============================
+# CONFIRMATION D’ACHAT (affichage + validation finale)
+# ============================
+@app.route("/produits_rapide/confirmer/<int:vip_id>", methods=["GET", "POST"])
+@login_required
+def confirmer_produit_rapide(vip_id):
+    phone = get_logged_in_user_phone()
+    user = User.query.filter_by(phone=phone).first()
+
+    # retrouver le produit
+    produit = next((p for p in PRODUITS_VIP if p["id"] == vip_id), None)
+    if not produit:
+        flash("Produit introuvable.", "danger")
+        return redirect(url_for("produits_rapide_page"))
+
+    montant = produit["prix"]
+    revenu_journalier = produit["revenu_journalier"]
+    revenu_total = revenu_journalier * 14  # durée fixe 14 jours
+
+    # GET → afficher la page de confirmation
+    if request.method == "GET":
+        return render_template(
+            "confirm_rapide.html",
+            p=produit,
+            revenu_total=revenu_total,
+            user=user
+        )
+
+    # POST → vérifier solde
+    if float(user.solde_total or 0) < montant:
+        flash("Solde insuffisant.", "danger")
+        return redirect(url_for("produits_rapide_page"))
+
+    # Débiter le solde
+    user.solde_total -= montant
+
+    # Créer l’investissement
+    inv = Investissement(
+        phone=phone,
+        montant=montant,
+        revenu_journalier=revenu_journalier,
+        duree=14,
+        actif=True
+    )
+    db.session.add(inv)
+    db.session.commit()
+
+    # afficher animation de succès
+    return render_template(
+        "confirm_rapide_loading.html",
+        montant=montant,
+        produit=produit
+    )
+
+
+# ============================
+# VALIDATION DIRECTE (ancienne route)
+# → On la garde pour compatibilité mais elle n’est plus affichée dans HTML
+# ============================
 @app.route("/produits_rapide/valider/<int:vip_id>", methods=["POST"])
 @login_required
 def valider_produit_rapide(vip_id):
@@ -566,7 +625,6 @@ def valider_produit_rapide(vip_id):
         flash("Solde insuffisant.", "danger")
         return redirect(url_for("produits_rapide_page"))
 
-    # Enregistrer
     inv = Investissement(
         phone=phone,
         montant=montant,
@@ -576,62 +634,10 @@ def valider_produit_rapide(vip_id):
     )
     db.session.add(inv)
 
-    # Débiter le solde
     user.solde_total -= montant
     db.session.commit()
 
-    # Page spéciale avec chargement + succès
     return render_template("achat_rapide_loader.html", produit=produit)
-
-@app.route("/produits_rapide/confirmer/<int:vip_id>", methods=["GET", "POST"])
-@login_required
-def confirmer_produit_rapide(vip_id):
-    phone = get_logged_in_user_phone()
-    user = User.query.filter_by(phone=phone).first()
-
-    produit = next((p for p in PRODUITS_VIP if p["id"] == vip_id), None)
-    if not produit:
-        flash("Produit introuvable.", "danger")
-        return redirect(url_for("produits_rapide_page"))
-
-    montant = produit["prix"]
-    revenu_journalier = produit["revenu_journalier"]
-    revenu_total = revenu_journalier * 14
-
-    # GET → afficher page
-    if request.method == "GET":
-        return render_template(
-            "confirm_rapide.html",
-            p=produit,
-            revenu_total=revenu_total,
-            user=user
-        )
-
-    # POST → CONFIRMER ACHAT
-    if float(user.solde_total or 0) < montant:
-        flash("Solde insuffisant.", "danger")
-        return redirect(url_for("produits_rapide_page"))
-
-    # 🔥 Débit du VRAI solde utilisé dans ton dashboard
-    user.solde_total -= montant
-
-    # 🔥 Création investissement
-    inv = Investissement(
-        phone=phone,
-        montant=montant,
-        revenu_journalier=revenu_journalier,
-        duree=14,
-        actif=True
-    )
-    db.session.add(inv)
-
-    db.session.commit()
-
-    return render_template(
-        "confirm_rapide_loading.html",
-        montant=montant,
-        produit=produit
-    )
 
 @app.route("/deposit", methods=["GET", "POST"])
 @login_required
